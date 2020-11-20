@@ -56,7 +56,7 @@ async def delDataSite(data, site):
                 try:
                     urlSite = f"http://{site['ip']}/api/logger/{key['ts']}"
                     session = aiohttp.ClientSession(headers=headerSite)
-                    async with session.request('DELETE', url=urlSite) as response:
+                    async with session.request('DELETE', url=urlSite):
                         await session.close()
                         break
                 except:

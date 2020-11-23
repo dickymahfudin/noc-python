@@ -18,12 +18,13 @@ VPN_NAME = os.environ.get("VPN_NAME")
 TOKEN_SITE = os.environ.get("TOKEN_SITE")
 baseUrl = f"http://{BASE_URL}:{PORT}"
 raspiId = os.environ.get("RASPI_ID")
-vpnName = os.environ.get("VPN_NAME")
+lc = os.environ.get("lc")
 
 urlQueue = f"{baseUrl}/api/raspi"
-urlJs = f"{baseUrl}/api/nojs/{VPN_NAME}"
+urlJs = f"{baseUrl}/api/nojs"
 urlLoggers = f"{baseUrl}/api/logger"
 headerSite = {"Authorization": f"Bearer {TOKEN_SITE}"}
+paramLc = {"lc": lc}
 
 
 async def ceckProgramRunning():
@@ -43,10 +44,10 @@ async def updateQueue(status):
 
 async def listJs():
     session = aiohttp.ClientSession()
-    async with session.request('GET', url=urlJs) as response:
+    async with session.request('GET', url=urlJs, params=paramLc) as response:
         result = await response.json()
         await session.close()
-        return result["data"]
+        return result
 
 
 async def delDataSite(data, site):
@@ -117,16 +118,19 @@ async def main():
     status = await ceckProgramRunning()
     if status["status"] == False:
         site = await listJs()
-        print(f"\nRunning Raspi id {raspiId} -> {VPN_NAME}")
-        await updateQueue(True)
-        for data in site:
-            print(f"=> {data['nojs']} {data['site']}")
-        print("\nProcessing...\nDon't turn off the application\n")
+        if site["status"] == "success":
+            print(f"\nRunning Raspi id {raspiId} -> {VPN_NAME}")
+            await updateQueue(True)
+            for data in site["data"]:
+                print(f"=> {data['nojs']} {data['site']}")
+            print("\nProcessing...\nDon't turn off the application\n")
 
-        async with aiohttp.ClientSession(headers=headerSite) as session:
-            tasks = [getDataSite(session, js) for js in site]
-            await asyncio.gather(*tasks)
-            await updateQueue(False)
+            async with aiohttp.ClientSession(headers=headerSite) as session:
+                tasks = [getDataSite(session, js) for js in site["data"]]
+                await asyncio.gather(*tasks)
+                await updateQueue(False)
+        else:
+            print("\nOpps, Nojs Not Found :)\n")
 
     else:
         print("\nOpps, The Program is Running\nHappy Programming :)\n")

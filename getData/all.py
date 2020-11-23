@@ -18,7 +18,7 @@ VPN_NAME = os.environ.get("VPN_NAME")
 TOKEN_SITE = os.environ.get("TOKEN_SITE")
 baseUrl = f"http://{BASE_URL}:{PORT}"
 raspiId = os.environ.get("RASPI_ID")
-lc = os.environ.get("lc")
+lc = os.environ.get("LC")
 
 urlQueue = f"{baseUrl}/api/raspi"
 urlJs = f"{baseUrl}/api/nojs"

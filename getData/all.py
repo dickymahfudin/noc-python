@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 print('\n')
 # dotenv_path = join(dirname(__file__), '.env')
 dotenv_path = join(os.getcwd(), '.env')
+dotenv_path = "/home/ubuntu/noc-python/.env"
 print(dotenv_path)
 load_dotenv(dotenv_path)
 

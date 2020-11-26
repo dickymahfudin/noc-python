@@ -74,7 +74,6 @@ async def pushDb(data, site, start):
         async with session.request('POST', url=urlLoggers, json=data, timeout=timeout) as response:
             result = await response.json()
             await session.close()
-            print(result)
             elapsed = time.perf_counter() - start
             if data["status"] == "success":
                 await delDataSite(data["data"], site)

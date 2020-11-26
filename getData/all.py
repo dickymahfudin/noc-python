@@ -26,6 +26,7 @@ urlJs = f"{baseUrl}/api/nojs"
 urlLoggers = f"{baseUrl}/api/logger"
 headerSite = {"Authorization": f"Bearer {TOKEN_SITE}"}
 paramLc = {"lc": lc}
+timeout = aiohttp.ClientTimeout(total=10000)
 
 
 async def ceckProgramRunning():
@@ -52,7 +53,6 @@ async def listJs():
 
 
 async def delDataSite(data, site):
-    print("Delete Data Redis")
     try:
         for key in data:
             while (1):
@@ -69,23 +69,24 @@ async def delDataSite(data, site):
 
 
 async def pushDb(data, site, start):
-    print("Push Data Lokal")
-    session = aiohttp.ClientSession()
-    async with session.request('POST', url=urlLoggers, json=data) as response:
-        result = await response.json()
-        await session.close()
-        elapsed = time.perf_counter() - start
-        if data["status"] == "success":
-            await delDataSite(data["data"], site)
-            print(
-                f"{data['nojs']} {site['site']}, {result['data']}  => {elapsed:0.2f} seconds")
-        else:
-            print(
-                f"{data['nojs']} {site['site']}, {result['data']} Value Error => {elapsed:0.2f} seconds")
+    timeout = aiohttp.ClientTimeout(total=10000)
+    async with aiohttp.ClientSession(timeout=timeout) as session:
+        async with session.request('POST', url=urlLoggers, json=data, timeout=timeout) as response:
+            result = await response.json()
+            await session.close()
+            print(result)
+            elapsed = time.perf_counter() - start
+            if data["status"] == "success":
+                await delDataSite(data["data"], site)
+                print(
+                    f"{data['nojs']} {site['site']}, {result['data']}  => {elapsed:0.2f} seconds")
+
+            else:
+                print(
+                    f"{data['nojs']} {site['site']}, {result['data']} Value Error => {elapsed:0.2f} seconds")
 
 
 async def getDataSite(session, site):
-    print("Get Data Site")
     # urlSite = f"{baseUrl}/{site['ip']}/api/logger"
     urlSite = f"http://{site['ip']}/api/logger"
 

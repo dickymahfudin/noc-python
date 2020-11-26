@@ -52,6 +52,7 @@ async def listJs():
 
 
 async def delDataSite(data, site):
+    print("Delete Data Redis")
     try:
         for key in data:
             while (1):
@@ -68,6 +69,7 @@ async def delDataSite(data, site):
 
 
 async def pushDb(data, site, start):
+    print("Push Data Lokal")
     session = aiohttp.ClientSession()
     async with session.request('POST', url=urlLoggers, json=data) as response:
         result = await response.json()
@@ -75,14 +77,15 @@ async def pushDb(data, site, start):
         elapsed = time.perf_counter() - start
         if data["status"] == "success":
             await delDataSite(data["data"], site)
-            return(
+            print(
                 f"{data['nojs']} {site['site']}, {result['data']}  => {elapsed:0.2f} seconds")
         else:
-            return(
+            print(
                 f"{data['nojs']} {site['site']}, {result['data']} Value Error => {elapsed:0.2f} seconds")
 
 
 async def getDataSite(session, site):
+    print("Get Data Site")
     # urlSite = f"{baseUrl}/{site['ip']}/api/logger"
     urlSite = f"http://{site['ip']}/api/logger"
 
@@ -95,7 +98,7 @@ async def getDataSite(session, site):
                 "nojs": site["nojs"],
                 "data": json
             }
-            print(await pushDb(data, site, startTime))
+            await pushDb(data, site, startTime)
     except:
         data = {
             "status": "error",

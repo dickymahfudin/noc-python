@@ -1,12 +1,18 @@
-import os
-from os.path import join, dirname
-from dotenv import load_dotenv
+from helpers import getDataSite, headerSite, listJs, asyncio, time, ceckProgramRunning, raspiId, VPN_NAME, updateQueue, aiohttp
 
-print('\n')
-# dotenv_path = join(dirname(__file__), '.env')
-dotenv_path = join(os.getcwd(), '.env')
-print(dotenv_path)
-load_dotenv(dotenv_path)
 
-BASE_URL = os.environ.get("BASE_URL")
-print(BASE_URL)
+async def main(nojs):
+    start = time.perf_counter()
+    tempSite = await listJs()
+    site = next(x for x in tempSite['data'] if x['nojs'] == nojs)
+    print(f"=> {site['nojs']} {site['site']}")
+    async with aiohttp.ClientSession(headers=headerSite) as session:
+        await asyncio.gather(getDataSite(session, site))
+
+    elapsed = time.perf_counter() - start
+    print(f"\nProgram completed in {elapsed:0.2f} seconds.")
+
+
+def runSingle(nojs):
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main(nojs))

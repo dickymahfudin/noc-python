@@ -9,7 +9,7 @@ from pathlib import Path
 
 print('\n')
 # dotenv_path = join(dirname(__file__), '.env')
-dotenv_path = Path('.').resolve() / 'noc-python' / '.env'
+dotenv_path = Path('.').resolve() / '.env'
 # dotenv_path = "/home/ubuntu/noc-python/.env"
 print(dotenv_path)
 load_dotenv(dotenv_path)
@@ -123,7 +123,6 @@ async def pushDbProgramSite(data, site, start, status):
     timeout = aiohttp.ClientTimeout(total=10000)
     async with aiohttp.ClientSession(timeout=timeout) as session:
         async with session.request('POST', url=urlStatusProgram, json=data, timeout=timeout) as response:
-            await response.json()
             await session.close()
             elapsed = time.perf_counter() - start
             if status == "success":

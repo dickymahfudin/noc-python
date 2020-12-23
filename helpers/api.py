@@ -9,7 +9,7 @@ from pathlib import Path
 
 print('\n')
 # dotenv_path = join(dirname(__file__), '.env')
-dotenv_path = Path('.').resolve() / '.env'
+dotenv_path = Path('.').resolve() / 'noc-python' / '.env'
 # dotenv_path = "/home/ubuntu/noc-python/.env"
 print(dotenv_path)
 load_dotenv(dotenv_path)

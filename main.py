@@ -1,33 +1,40 @@
-from getData import runSingle, runAll
-from checkProgram import runAllCheck, runSingleChech
+from getData import runAllNewSite, runSingleNewSite, runAllV1
+from checkProgram import runAllCheckNew, runSingleChechNew
 import sys
 
 
 def helpCommand():
-    print('main.py getdata:all \t\t program mengambil data semua site')
-    print('main.py getdata:single nojs \t program mengambil data satu site')
-    print('main.py checkP:all nojs \t mengecek status program semua site')
+    print()
+    print('main.py getdata:all:v1 \t\t mengambil data ehub v1 100 site (all)\n')
+    print('main.py getdata:all:v3 \t\t mengambil data ehub v3 site baru (all)')
+    print('main.py getdata:single:v3 nojs \t mengambil data ehub v3 site baru (single)')
+    print('main.py checkP:all \t mengecek status program semua site')
     print('main.py checkP:single nojs \t mengecek status program satu site')
+    print()
 
 
 try:
     param = sys.argv[1]
     if param == 'help':
         helpCommand()
-    elif param == 'getdata:all':
-        runAll()
-    elif param == 'getdata:single':
+    elif param == 'getdata:all:v1':
+        runAllV1()
+    elif param == 'getdata:all:v3':
+        runAllNewSite()
+    elif param == 'getdata:single:v3':
         try:
-            runSingle(sys.argv[2])
+            runSingleNewSite(sys.argv[2])
         except:
             print('sertakan paramater Nojs dengan benar')
+
     elif param == 'checkP:all':
-        runAllCheck()
+        runAllCheckNew()
     elif param == 'checkP:single':
         try:
-            runSingleChech(sys.argv[2])
+            runSingleChechNew(sys.argv[2])
         except:
             print('sertakan paramater Nojs dengan benar')
 
 except:
     helpCommand()
+    pass

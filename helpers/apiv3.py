@@ -110,7 +110,7 @@ async def pushDbProgramSite(port, data, site, start, status):
             elapsed = time.perf_counter() - start
             if status == "success":
                 print(
-                    f"{site['nojs']} {site['site']}, => {elapsed:0.2f} seconds")
+                    f"{site['nojs']} {site['site']}, Value Success => {elapsed:0.2f} seconds")
                 return data
 
             else:
@@ -164,3 +164,46 @@ async def checkStatusProgramSite(port, session, site):
             "store_log_data_timer": None,
         }
         return await pushDbProgramSite(port, data, site, startTime, 'no')
+
+
+async def pushDbCapacitySite(port, data, site, start, status):
+    url = f"{baseUrl}:{port}/api/capacity"
+    async with aiohttp.ClientSession(timeout=timeout) as session:
+        async with session.request('POST', url=url, json=data, timeout=timeout):
+            await session.close()
+            elapsed = time.perf_counter() - start
+            if status == "success":
+                print(
+                    f"{site['nojs']} {site['site']}, Value Success => {elapsed:0.2f} seconds")
+                return data
+
+            else:
+                print(
+                    f"{site['nojs']} {site['site']}, Value Error => {elapsed:0.2f} seconds")
+                return data
+
+
+async def checkCapacitySite(port, session, site):
+    urlSite = f"http://{site['ip']}/api/status/system"
+    startTime = time.perf_counter()
+    try:
+        async with session.get(urlSite) as response:
+            json = await response.json()
+            data = {
+                "nojs_id": site["id"],
+                "disk_free": json['disk']['free'],
+                "disk_total": json['disk']['total'],
+                "disk_used": json['disk']['used'],
+                "free_ram": json['free_ram']
+            }
+            return await pushDbCapacitySite(port, data, site, startTime, 'success')
+
+    except:
+        data = {
+            "nojs_id": site["id"],
+            "disk_free": None,
+            "disk_total": None,
+            "disk_used": None,
+            "free_ram": None,
+        }
+        return await pushDbCapacitySite(port, data, site, startTime, 'no')

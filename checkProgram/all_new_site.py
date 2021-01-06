@@ -1,23 +1,22 @@
 import time
 import asyncio
 import aiohttp
-from variable import PORT_NEW_SITE, headerSite, RASPI
+from variable import headerSite, RASPI
 from helpers import listJs, checkStatusProgramSite
 
 
-async def main():
-    print("ok")
+async def main(port, temp):
     start = time.perf_counter()
-    site = await listJs(PORT_NEW_SITE)
+    site = await listJs(port)
     if site["status"] == "success":
-        print(f"\n--- Check Status Program, All Site APT2 ---")
+        print(f"\n--- Check Status Program, All Site {temp} ---")
         print(f"\nRunning Raspi name {RASPI}")
         for data in site["data"]:
             print(f"=> {data['nojs']} {data['site']}")
         print("\nProcessing...\nDon't turn off the application\n")
 
         async with aiohttp.ClientSession(headers=headerSite) as session:
-            tasks = [checkStatusProgramSite(PORT_NEW_SITE, session, js)
+            tasks = [checkStatusProgramSite(port, session, js)
                      for js in site["data"]]
             await asyncio.gather(*tasks)
     else:
@@ -27,6 +26,6 @@ async def main():
     print(f"\nProgram completed in {elapsed:0.2f} seconds.\n")
 
 
-def runAllCheckNew():
+def runAllCheckNew(port, temp):
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(main(port, temp))

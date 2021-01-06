@@ -1,35 +1,35 @@
 import time
 import aiohttp
 import asyncio
-from variable import PORT_NEW_SITE, headerSite
+from variable import headerSite
 from helpers import ceckProgramRunning, listJs, updateQueue, RASPI, getDataSite
 
 
-async def main():
+async def main(port, temp):
     start = time.perf_counter()
-    status = await ceckProgramRunning(PORT_NEW_SITE)
+    status = await ceckProgramRunning(port)
     if status["status"] == False:
         raspiId = status["id"]
-        site = await listJs(PORT_NEW_SITE)
+        site = await listJs(port)
         if site["status"] == "success":
-            print(f"\n--- Get All Data V3 APT2 ---")
+            print(f"\n--- Get All Data V3 {temp} ---")
             print(f"\nRunning Raspi name {RASPI}")
-            await updateQueue(PORT_NEW_SITE, raspiId, True)
+            await updateQueue(port, raspiId, True)
             for data in site["data"]:
                 print(f"=> {data['nojs']} {data['site']}")
             print("\nProcessing...\nDon't turn off the application\n")
 
             async with aiohttp.ClientSession(headers=headerSite) as session:
-                tasks = [getDataSite(PORT_NEW_SITE, session, js)
+                tasks = [getDataSite(port, session, js)
                          for js in site["data"]]
                 await asyncio.gather(*tasks)
-                await updateQueue(PORT_NEW_SITE, raspiId, False)
+                await updateQueue(port, raspiId, False)
 
         else:
             print("\nOpps, Nojs Not Found :)\n")
 
     else:
-        print(f"\n--- Get All Data V3 APT2 ---")
+        print(f"\n--- Get All Data V3 {temp} ---")
         print(f"\nRunning Raspi name {RASPI}")
         print("\nOpps, The Program is Running\nHappy Programming :)\n")
 
@@ -37,6 +37,6 @@ async def main():
     print(f"\nProgram completed in {elapsed:0.2f} seconds.\n")
 
 
-def runAllNewSite():
+def runAllNewSite(port, temp):
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(main(port, temp))

@@ -1,6 +1,6 @@
 from getData import runAllNewSite, runSingleNewSite, runAllV1
 from checkProgram import runAllCheckNew, runSingleChechNew
-from capacity import runAllCapacity
+from capacity import runAllCapacity, runSingleCapacity
 import sys
 from variable import PORT_APT1, PORT_APT2
 
@@ -13,6 +13,7 @@ def helpCommand():
     print('main.py program:all:apt2 \t\t mengecek status program APT2 (all)')
     print('main.py program:single:apt2 nojs \t mengecek status program APT2 (single)')
     print('main.py capacity:all:apt2 \t\t mengecek status ram, disk APT2 (all)')
+    print('main.py capacity:single:apt2 nojs \t mengecek status ram, disk APT2 (single)')
     print()
 
 
@@ -38,7 +39,11 @@ try:
             print('sertakan paramater Nojs dengan benar')
     elif param == 'capacity:all:apt2':
         runAllCapacity(PORT_APT2, "APT2")
-        pass
+    elif param == 'capacity:single:apt2':
+        try:
+            runSingleCapacity(sys.argv[2], PORT_APT2, "APT2")
+        except:
+            print('sertakan paramater Nojs dengan benar')
     else:
         helpCommand()
 

@@ -4,8 +4,8 @@ from pathlib import Path
 
 
 print('\n')
-base_path = Path('.').resolve() / 'noc-python'
-# base_path = Path('.').resolve()
+# base_path = Path('.').resolve() / 'noc-python'
+base_path = Path('.').resolve()
 dotenv_path = f"{base_path}/.env"
 upload_path = f"{base_path}/upload"
 # dotenv_path = Path('.').resolve() / 'noc-python' / '.env'
@@ -23,4 +23,5 @@ TOKEN_100S_V1 = os.environ.get("TOKEN_100S_V1")
 TOKEN_SITE = os.environ.get("TOKEN_SITE")
 SSH_USER = os.environ.get("SSH_USER")
 SSH_PASS = os.environ.get("SSH_PASS")
+DIR_HOME = os.environ.get("DIR_HOME")
 headerSite = {"Authorization": f"Bearer {TOKEN_SITE}"}

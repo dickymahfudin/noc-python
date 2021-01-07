@@ -6,7 +6,6 @@ from helpers import listJs, checkCapacitySite
 
 
 async def main(port, temp):
-    print("ok")
     start = time.perf_counter()
     site = await listJs(port)
     if site["status"] == "success":

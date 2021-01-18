@@ -14,6 +14,8 @@ async def main(nojs, port, temp):
     print(f"\n=> {site['nojs']} {site['site']}")
 
     print("\nProcessing...\nDon't turn off the application\n")
+    print(f"dirr from => {file}")
+    print(f"dirr to => {to}\n")
     pushToSite(site, file, to)
 
     elapsed = time.perf_counter() - start

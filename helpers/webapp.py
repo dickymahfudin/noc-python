@@ -1,5 +1,5 @@
 import sys
-from paramiko import SSHClient
+from paramiko import SSHClient, MissingHostKeyPolicy
 from scp import SCPClient
 from variable import SSH_USER, SSH_PASS, DIR_HOME
 
@@ -12,6 +12,7 @@ def progress(filename, size, sent):
 def pushToSite(site, file, to):
     try:
         ssh = SSHClient()
+        ssh.set_missing_host_key_policy(MissingHostKeyPolicy())
         ssh.load_system_host_keys()
         ssh.connect(site["ip"], username=SSH_USER, password=SSH_PASS)
         print(f"---- {site['nojs']} {site['site']} ----")

@@ -1,4 +1,4 @@
-from getData import runAllNewSite, runSingleNewSite, runAllV1
+from getData import runAllNewSite, runSingleNewSite, runAllV1, runOtherSite
 from checkProgram import runAllCheckNew, runSingleChechNew
 from capacity import runAllCapacity, runSingleCapacity
 from ssh import webAppAll, webAppSingle
@@ -26,7 +26,8 @@ def helpCommand():
     print('main.py capacity:all:apt2 \t\t cek status ram, disk APT2 (all)')
     print('main.py capacity:single:apt2 nojs \t cek status ram, disk APT2 (single)')
     print('main.py webapp:all:apt2 \t\t update program webapp APT2 (all)')
-    print('main.py webapp:single:apt2 nojs \t update program webapp APT2 (single)')
+    print('main.py webapp:single:apt2 nojs \t update program webapp APT2 (single)\n')
+    print('main.py other \t\t\t\t mengambil data ehub v3 Non Bakti')
     print()
 
 
@@ -99,6 +100,13 @@ try:
             print('sertakan paramater Nojs dengan benar')
 
     # ---------------else---------------
+    elif param == 'other':
+        print("masuk")
+        runOtherSite()
+        # try:
+        # except:
+        #     print('sertakan paramater Nojs dengan benar')
+
     else:
         helpCommand()
 

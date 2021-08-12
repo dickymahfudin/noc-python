@@ -4,8 +4,8 @@ from pathlib import Path
 
 
 print('\n')
-base_path = Path('.').resolve() / 'noc-python'
-# base_path = Path('.').resolve()
+# base_path = Path('.').resolve() / 'noc-python'
+base_path = Path('.').resolve()
 dotenv_path = f"{base_path}/.env"
 upload_path = f"{base_path}/upload"
 # dotenv_path = Path('.').resolve() / 'noc-python' / '.env'

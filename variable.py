@@ -4,10 +4,11 @@ from pathlib import Path
 
 
 print('\n')
-# base_path = Path('.').resolve() / 'noc-python'
-base_path = Path('.').resolve()
+base_path = Path('.').resolve() / 'noc-python'
+# base_path = Path('.').resolve()
 dotenv_path = f"{base_path}/.env"
 upload_path = f"{base_path}/upload"
+log_path = f"{base_path}/log"
 # dotenv_path = Path('.').resolve() / 'noc-python' / '.env'
 # dotenv_path = "/home/ubuntu/noc-python/.env"
 print(f"env => {dotenv_path}")

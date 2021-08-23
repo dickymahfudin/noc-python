@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 import datetime
 import json
-from variable import headerSite
+from variable import headerSite, log_path
 
 async def delother(data, site):
     try:
@@ -28,7 +28,7 @@ async def getOther(session, site):
             datas = await response.json()
             date = datetime.datetime.now().strftime("%d-%m-%Y") 
             if len(datas) != 0:
-                f = open(f"./log/{site['site']}-{date}.txt", "w+")
+                f = open(f"{log_path}/{site['site']}-{date}.txt", "w+")
                 f.write(json.dumps(datas))
                 await delother(json, site)
     except:
